@@ -74,16 +74,16 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
             Categoria
           </label>
           <Select
-            value={filters.category || ""}
+            value={filters.category || "all"}
             onValueChange={(value) =>
-              handleFilterChange({ category: value || undefined })
+              handleFilterChange({ category: value === "all" ? undefined : value })
             }
           >
             <SelectTrigger data-testid="filter-category" className="h-8 text-sm">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas</SelectItem>
+              <SelectItem value="all">Todas</SelectItem>
               {categories.map((cat) => (
                 <SelectItem key={cat} value={cat}>
                   {cat}
@@ -98,16 +98,16 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
             Status
           </label>
           <Select
-            value={filters.status || ""}
+            value={filters.status || "all"}
             onValueChange={(value) =>
-              handleFilterChange({ status: value || undefined })
+              handleFilterChange({ status: value === "all" ? undefined : value })
             }
           >
             <SelectTrigger data-testid="filter-status" className="h-8 text-sm">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="paid">Pago</SelectItem>
               <SelectItem value="pending">Pendente</SelectItem>
               <SelectItem value="overdue">Vencido</SelectItem>
@@ -120,16 +120,16 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
             Tipo
           </label>
           <Select
-            value={filters.type || ""}
+            value={filters.type || "all"}
             onValueChange={(value) =>
-              handleFilterChange({ type: value || undefined })
+              handleFilterChange({ type: value === "all" ? undefined : value })
             }
           >
             <SelectTrigger data-testid="filter-type" className="h-8 text-sm">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="fixed">Fixo</SelectItem>
               <SelectItem value="installment">Parcelado</SelectItem>
             </SelectContent>
