@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/select";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { ExportReports } from "@/components/export-reports";
+import { ExpenseProjection } from "@/components/expense-projection";
 import type { Expense } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
 
