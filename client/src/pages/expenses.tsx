@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, ArrowUpDown } from "lucide-react";
 import { ExpenseDialog } from "@/components/expense-dialog";
+import { ExpenseFilters, type FilterState } from "@/components/expense-filters";
 import {
   Table,
   TableBody,
@@ -33,11 +34,37 @@ export default function Expenses() {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FilterState>({});
   const { toast } = useToast();
 
   const { data: expenses, isLoading } = useQuery<Expense[]>({
     queryKey: ["/api/expenses"],
   });
+
+  // Apply filters
+  const filteredExpenses = useMemo(() => {
+    if (!expenses) return [];
+    
+    return expenses.filter((expense) => {
+      if (filters.category && expense.category !== filters.category) return false;
+      if (filters.status && expense.status !== filters.status) return false;
+      if (filters.type && expense.type !== filters.type) return false;
+      
+      if (filters.startDate) {
+        const expenseDate = new Date(expense.dueDate);
+        const startDate = new Date(filters.startDate);
+        if (expenseDate < startDate) return false;
+      }
+      
+      if (filters.endDate) {
+        const expenseDate = new Date(expense.dueDate);
+        const endDate = new Date(filters.endDate);
+        if (expenseDate > endDate) return false;
+      }
+      
+      return true;
+    });
+  }, [expenses, filters]);
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -217,10 +244,15 @@ export default function Expenses() {
         </Button>
       </div>
 
+      <ExpenseFilters 
+        onFilterChange={setFilters}
+        onClearFilters={() => setFilters({})}
+      />
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base font-medium">
-            Todos os Gastos
+            Todos os Gastos {filteredExpenses.length !== expenses?.length && `(${filteredExpenses.length} de ${expenses?.length})`}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -243,25 +275,25 @@ export default function Expenses() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {!expenses || expenses.length === 0 ? (
+                {!filteredExpenses || filteredExpenses.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="h-24 text-center">
                       <div className="flex flex-col items-center justify-center py-8">
                         <p className="text-sm text-muted-foreground">
-                          Nenhum gasto cadastrado
+                          {expenses?.length === 0 ? "Nenhum gasto cadastrado" : "Nenhum gasto encontrado com os filtros aplicados"}
                         </p>
                         <Button
                           variant="link"
                           onClick={handleAddExpense}
                           className="mt-2"
                         >
-                          Adicionar seu primeiro gasto
+                          {expenses?.length === 0 ? "Adicionar seu primeiro gasto" : "Ajustar filtros"}
                         </Button>
                       </div>
                     </TableCell>
                   </TableRow>
                 ) : (
-                  expenses.map((expense) => (
+                  filteredExpenses.map((expense) => (
                     <TableRow
                       key={expense.id}
                       className="hover-elevate"
