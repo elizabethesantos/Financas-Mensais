@@ -55,9 +55,41 @@ class MemoryStorage implements IStorage {
       type: insertExpense.type,
       totalInstallments: insertExpense.totalInstallments,
       paidInstallments: insertExpense.paidInstallments || 0,
+      parentExpenseId: insertExpense.parentExpenseId || null,
     };
     
     this.expenses.set(id, expense);
+
+    // Se é uma parcela (installment), criar automaticamente as próximas
+    if (expense.type === "installment" && expense.totalInstallments && !insertExpense.parentExpenseId) {
+      const baseDate = new Date(expense.dueDate);
+      
+      // Criar as próximas parcelas (da 2ª até a última)
+      for (let i = 1; i < expense.totalInstallments; i++) {
+        const nextDate = new Date(baseDate);
+        nextDate.setMonth(nextDate.getMonth() + i);
+        
+        const nextInstallmentId = randomUUID();
+        const nextInstallment: Expense = {
+          id: nextInstallmentId,
+          name: `${expense.name} (${i + 1}/${expense.totalInstallments})`,
+          category: expense.category,
+          value: expense.value, // Mesmo valor da parcela
+          dueDate: nextDate.toISOString().split('T')[0],
+          status: "pending",
+          type: "installment",
+          totalInstallments: expense.totalInstallments,
+          paidInstallments: 0,
+          parentExpenseId: id, // Marca que é derivada da parcela 1
+        };
+        
+        this.expenses.set(nextInstallmentId, nextInstallment);
+      }
+      
+      // Atualizar a primeira parcela para indicar que é a 1ª
+      expense.name = `${expense.name} (1/${expense.totalInstallments})`;
+    }
+
     return expense;
   }
 
@@ -76,6 +108,19 @@ class MemoryStorage implements IStorage {
   }
 
   async deleteExpense(id: string): Promise<boolean> {
+    const expense = this.expenses.get(id);
+    if (!expense) return false;
+
+    // Se é uma parcela pai, deletar todas as parcelas filhas também
+    if (expense.type === "installment" && !expense.parentExpenseId) {
+      const childExpenses = Array.from(this.expenses.values()).filter(
+        (exp) => exp.parentExpenseId === id
+      );
+      childExpenses.forEach((child) => {
+        this.expenses.delete(child.id);
+      });
+    }
+
     return this.expenses.delete(id);
   }
 

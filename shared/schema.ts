@@ -13,6 +13,7 @@ export const expenses = pgTable("expenses", {
   totalInstallments: integer("total_installments"), // null for fixed, number for installments
   paidInstallments: integer("paid_installments").default(0), // how many installments have been paid
   status: text("status").notNull().default('pending'), // 'paid', 'pending', 'overdue'
+  parentExpenseId: varchar("parent_expense_id"), // references the first installment if this is a child
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -27,6 +28,7 @@ export const insertExpenseSchema = createInsertSchema(expenses, {
   totalInstallments: z.number().int().positive().optional().nullable(),
   paidInstallments: z.number().int().min(0).optional(),
   status: z.enum(['paid', 'pending', 'overdue']).optional(),
+  parentExpenseId: z.string().optional().nullable(),
 }).omit({
   id: true,
   createdAt: true,

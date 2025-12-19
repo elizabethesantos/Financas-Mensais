@@ -163,7 +163,9 @@ export function ExpenseDialog({
                   name="value"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Valor (R$)</FormLabel>
+                      <FormLabel>
+                        {type === "installment" ? "Valor Total (R$)" : "Valor (R$)"}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -321,6 +323,12 @@ export function ExpenseDialog({
                       Total de parcelas: {form.watch("totalInstallments")}
                     </p>
                     <p className="text-xs text-muted-foreground">
+                      Valor total: R${" "}
+                      {form.watch("value")
+                        ? parseFloat(form.watch("value")).toFixed(2)
+                        : "0,00"}
+                    </p>
+                    <p className="text-xs font-medium text-foreground">
                       Valor por parcela: R${" "}
                       {form.watch("value")
                         ? (
@@ -328,6 +336,9 @@ export function ExpenseDialog({
                             (form.watch("totalInstallments") || 1)
                           ).toFixed(2)
                         : "0,00"}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2 border-t pt-2">
+                      ℹ️ As próximas parcelas serão criadas automaticamente no mesmo dia dos meses seguintes
                     </p>
                   </div>
                 )}
