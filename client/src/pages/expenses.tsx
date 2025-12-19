@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, ArrowUpDown } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowUpDown, CheckCircle2 } from "lucide-react";
 import { ExpenseDialog } from "@/components/expense-dialog";
 import { ExpenseFilters, type FilterState } from "@/components/expense-filters";
 import {
@@ -183,6 +183,14 @@ export default function Expenses() {
     setDialogOpen(true);
   };
 
+  const handleTogglePayment = (expense: Expense) => {
+    const newStatus = expense.status === "paid" ? "pending" : "paid";
+    updateMutation.mutate({
+      id: expense.id,
+      data: { status: newStatus },
+    });
+  };
+
   const handleDeleteExpense = (id: string) => {
     setExpenseToDelete(id);
     setDeleteDialogOpen(true);
@@ -325,6 +333,18 @@ export default function Expenses() {
                       <TableCell>{getStatusBadge(expense.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {expense.status !== "paid" && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleTogglePayment(expense)}
+                              title="Marcar como pago"
+                              data-testid={`button-toggle-payment-${expense.id}`}
+                            >
+                              <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                              <span className="sr-only">Marcar como pago</span>
+                            </Button>
+                          )}
                           <Button
                             variant="ghost"
                             size="icon"
