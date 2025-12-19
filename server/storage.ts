@@ -1,7 +1,5 @@
-// Updated to use DatabaseStorage based on javascript_database blueprint
 import { expenses, type Expense, type InsertExpense } from "@shared/schema";
-import { db } from "./db";
-import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
 export interface IStorage {
   // Expense operations
@@ -18,93 +16,104 @@ export interface IStorage {
   getMonthlyTotals(months: number): Promise<{ month: string; total: number }[]>;
 }
 
-export class DatabaseStorage implements IStorage {
+class MemoryStorage implements IStorage {
+  private expenses: Map<string, Expense> = new Map();
+
   async getAllExpenses(): Promise<Expense[]> {
-    return await db.select().from(expenses).orderBy(desc(expenses.dueDate));
+    return Array.from(this.expenses.values()).sort((a, b) => {
+      return new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime();
+    });
   }
 
   async getExpenseById(id: string): Promise<Expense | undefined> {
-    const [expense] = await db.select().from(expenses).where(eq(expenses.id, id));
-    return expense || undefined;
+    return this.expenses.get(id);
   }
 
   async getExpensesByDateRange(startDate: string, endDate: string): Promise<Expense[]> {
-    return await db
-      .select()
-      .from(expenses)
-      .where(
-        and(
-          gte(expenses.dueDate, startDate),
-          lte(expenses.dueDate, endDate)
-        )
-      )
-      .orderBy(expenses.dueDate);
+    const start = new Date(startDate).getTime();
+    const end = new Date(endDate).getTime();
+    
+    return Array.from(this.expenses.values()).filter((exp) => {
+      const dueDate = new Date(exp.dueDate).getTime();
+      return dueDate >= start && dueDate <= end;
+    });
   }
 
   async getExpensesByStatus(status: string): Promise<Expense[]> {
-    return await db
-      .select()
-      .from(expenses)
-      .where(eq(expenses.status, status))
-      .orderBy(expenses.dueDate);
+    return Array.from(this.expenses.values()).filter((exp) => exp.status === status);
   }
 
   async createExpense(insertExpense: InsertExpense): Promise<Expense> {
-    const [expense] = await db
-      .insert(expenses)
-      .values(insertExpense)
-      .returning();
+    const id = insertExpense.id || randomUUID();
+    const expense: Expense = {
+      id,
+      name: insertExpense.name,
+      category: insertExpense.category,
+      value: insertExpense.value,
+      dueDate: insertExpense.dueDate,
+      status: insertExpense.status || "pending",
+      type: insertExpense.type,
+      totalInstallments: insertExpense.totalInstallments,
+      paidInstallments: insertExpense.paidInstallments || 0,
+    };
+    
+    this.expenses.set(id, expense);
     return expense;
   }
 
   async updateExpense(id: string, updateData: Partial<InsertExpense>): Promise<Expense | undefined> {
-    const [expense] = await db
-      .update(expenses)
-      .set(updateData)
-      .where(eq(expenses.id, id))
-      .returning();
-    return expense || undefined;
+    const expense = this.expenses.get(id);
+    if (!expense) return undefined;
+
+    const updated: Expense = {
+      ...expense,
+      ...updateData,
+      id, // Preserve ID
+    };
+    
+    this.expenses.set(id, updated);
+    return updated;
   }
 
   async deleteExpense(id: string): Promise<boolean> {
-    const result = await db
-      .delete(expenses)
-      .where(eq(expenses.id, id))
-      .returning();
-    return result.length > 0;
+    return this.expenses.delete(id);
   }
 
   async getExpensesByCategory(): Promise<{ category: string; total: number }[]> {
-    const results = await db
-      .select({
-        category: expenses.category,
-        total: sql<number>`CAST(SUM(CAST(${expenses.value} AS DECIMAL)) AS DECIMAL)`,
-      })
-      .from(expenses)
-      .groupBy(expenses.category);
+    const byCategory = new Map<string, number>();
     
-    return results.map(r => ({
-      category: r.category,
-      total: Number(r.total)
+    this.expenses.forEach((expense) => {
+      const current = byCategory.get(expense.category) || 0;
+      byCategory.set(expense.category, current + parseFloat(expense.value));
+    });
+
+    return Array.from(byCategory.entries()).map(([category, total]) => ({
+      category,
+      total,
     }));
   }
 
   async getMonthlyTotals(months: number): Promise<{ month: string; total: number }[]> {
-    const results = await db
-      .select({
-        month: sql<string>`TO_CHAR(${expenses.dueDate}, 'YYYY-MM')`,
-        total: sql<number>`CAST(SUM(CAST(${expenses.value} AS DECIMAL)) AS DECIMAL)`,
-      })
-      .from(expenses)
-      .groupBy(sql`TO_CHAR(${expenses.dueDate}, 'YYYY-MM')`)
-      .orderBy(sql`TO_CHAR(${expenses.dueDate}, 'YYYY-MM') DESC`)
-      .limit(months);
-    
-    return results.map(r => ({
-      month: r.month,
-      total: Number(r.total)
-    }));
+    const monthData = new Map<string, number>();
+
+    this.expenses.forEach((expense) => {
+      const date = new Date(expense.dueDate);
+      const monthKey = date.toISOString().slice(0, 7); // YYYY-MM format
+      const current = monthData.get(monthKey) || 0;
+      monthData.set(monthKey, current + parseFloat(expense.value));
+    });
+
+    // Sort by month descending and limit to requested months
+    const sorted = Array.from(monthData.entries())
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .slice(0, months)
+      .map(([month, total]) => ({
+        month,
+        total,
+      }));
+
+    return sorted;
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new MemoryStorage();
