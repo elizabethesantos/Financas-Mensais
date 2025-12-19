@@ -125,10 +125,10 @@ export default function Reports() {
 
   if (expensesLoading || categoryLoading) {
     return (
-      <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Relatórios</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Relatórios</h1>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Análise detalhada dos seus gastos
           </p>
         </div>
@@ -146,17 +146,17 @@ export default function Reports() {
   }
 
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Relatórios</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Relatórios</h1>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Análise detalhada dos seus gastos
           </p>
         </div>
         <Select defaultValue="current-month">
-          <SelectTrigger className="w-[200px]" data-testid="select-period">
-            <SelectValue placeholder="Selecione o período" />
+          <SelectTrigger className="w-full sm:w-[180px] text-xs md:text-sm" data-testid="select-period">
+            <SelectValue placeholder="Período" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="current-month">Mês Atual</SelectItem>
@@ -171,35 +171,35 @@ export default function Reports() {
       {/* Comparison Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base font-medium">
+          <CardTitle className="text-sm md:text-base font-medium">
             Comparação Mensal
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Mês Atual</p>
-              <p className="text-2xl font-semibold tabular-nums">
+              <p className="text-xs md:text-sm text-muted-foreground">Mês Atual</p>
+              <p className="text-lg md:text-2xl font-semibold tabular-nums break-words">
                 {formatCurrency(comparison.currentMonth)}
               </p>
             </div>
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Mês Anterior</p>
-              <p className="text-2xl font-semibold tabular-nums">
+              <p className="text-xs md:text-sm text-muted-foreground">Mês Anterior</p>
+              <p className="text-lg md:text-2xl font-semibold tabular-nums break-words">
                 {formatCurrency(comparison.lastMonth)}
               </p>
             </div>
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Variação</p>
+              <p className="text-xs md:text-sm text-muted-foreground">Variação</p>
               <div className="flex items-center gap-2">
-                <p className="text-2xl font-semibold tabular-nums">
+                <p className="text-lg md:text-2xl font-semibold tabular-nums break-words">
                   {comparison.change > 0 ? "+" : ""}
                   {comparison.change.toFixed(1)}%
                 </p>
                 {comparison.change > 0 ? (
-                  <TrendingUp className="h-5 w-5 text-chart-3" />
+                  <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-chart-3 flex-shrink-0" />
                 ) : comparison.change < 0 ? (
-                  <TrendingDown className="h-5 w-5 text-chart-2" />
+                  <TrendingDown className="h-4 w-4 md:h-5 md:w-5 text-chart-2 flex-shrink-0" />
                 ) : null}
               </div>
             </div>
@@ -207,18 +207,18 @@ export default function Reports() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Category Breakdown */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-medium">
+            <CardTitle className="text-sm md:text-base font-medium">
               Distribuição por Categoria
             </CardTitle>
           </CardHeader>
           <CardContent>
             {categoryChartData.length > 0 ? (
               <>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie
                       data={categoryChartData}
@@ -228,7 +228,7 @@ export default function Reports() {
                       label={({ name, percent }) =>
                         `${name} (${(percent * 100).toFixed(0)}%)`
                       }
-                      outerRadius={80}
+                      outerRadius={60}
                       fill="#8884d8"
                       dataKey="value"
                     >
@@ -246,20 +246,20 @@ export default function Reports() {
                     />
                   </PieChart>
                 </ResponsiveContainer>
-                <div className="mt-4 space-y-2">
+                <div className="mt-3 md:mt-4 space-y-2">
                   {categoryChartData.map((item) => (
                     <div
                       key={item.name}
-                      className="flex items-center justify-between text-sm"
+                      className="flex items-center justify-between text-xs md:text-sm"
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className="h-3 w-3 rounded-full"
+                          className="h-2.5 w-2.5 md:h-3 md:w-3 rounded-full flex-shrink-0"
                           style={{ backgroundColor: item.color }}
                         />
-                        <span>{item.name}</span>
+                        <span className="truncate">{item.name}</span>
                       </div>
-                      <span className="font-semibold tabular-nums">
+                      <span className="font-semibold tabular-nums flex-shrink-0">
                         {formatCurrency(item.value)}
                       </span>
                     </div>
@@ -267,8 +267,8 @@ export default function Reports() {
                 </div>
               </>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">
-                Nenhum dado disponível
+              <div className="h-[220px] flex items-center justify-center text-xs md:text-sm text-muted-foreground">
+                Nenhum dado
               </div>
             )}
           </CardContent>
@@ -277,61 +277,50 @@ export default function Reports() {
         {/* Top Expenses */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-medium">
-              Maiores Gastos
+            <CardTitle className="text-sm md:text-base font-medium">
+              Top 5 Gastos
             </CardTitle>
           </CardHeader>
           <CardContent>
             {topExpenses.length > 0 ? (
-              <>
-                <div className="space-y-4">
-                  {topExpenses.map((expense, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between pb-4 border-b last:border-0 last:pb-0"
-                      data-testid={`top-expense-${index}`}
-                    >
-                      <div className="space-y-1 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">{expense.name}</span>
-                          <Badge variant="outline" className="text-xs">
-                            {expense.category}
-                          </Badge>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden max-w-[200px]">
-                          <div
-                            className="h-full bg-primary"
-                            style={{ width: `${expense.percentage}%` }}
-                          />
-                        </div>
-                      </div>
-                      <div className="text-right space-y-1">
-                        <p className="text-sm font-semibold tabular-nums">
-                          {formatCurrency(expense.value)}
+              <div className="space-y-2 max-h-[280px] overflow-y-auto">
+                {topExpenses.map((expense, index) => (
+                  <div key={index} className="space-y-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs md:text-sm font-medium truncate">
+                          {expense.name}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {expense.percentage.toFixed(1)}% do total
+                          {expense.category}
                         </p>
                       </div>
+                      <p className="text-xs md:text-sm font-semibold tabular-nums flex-shrink-0">
+                        {formatCurrency(expense.value)}
+                      </p>
                     </div>
-                  ))}
-                </div>
-                <div className="mt-6 pt-4 border-t">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Total Analisado</span>
-                    <span className="text-base font-semibold tabular-nums">
-                      {formatCurrency(getTotalByCategory())}
-                    </span>
+                    <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-primary transition-all"
+                        style={{ width: `${expense.percentage}%` }}
+                      />
+                    </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              <div className="py-8 text-center text-sm text-muted-foreground">
-                Nenhum dado disponível
+                ))}
               </div>
+            ) : (
+              <p className="text-xs md:text-sm text-muted-foreground text-center py-6">
+                Nenhum gasto este mês
+              </p>
             )}
           </CardContent>
         </Card>
+      </div>
+
+      {/* Projection and Export */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <ExpenseProjection />
+        <ExportReports />
       </div>
     </div>
   );

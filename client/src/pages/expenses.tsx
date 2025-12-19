@@ -168,7 +168,7 @@ export default function Expenses() {
     }
     return (
       <Badge variant="outline" className="text-xs">
-        {paidInstallments}/{totalInstallments} parcelas
+        {paidInstallments}/{totalInstallments}
       </Badge>
     );
   };
@@ -215,12 +215,12 @@ export default function Expenses() {
 
   if (isLoading) {
     return (
-      <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold text-foreground">Gastos</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Gerencie todos os seus gastos e parcelas
+            <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Gastos</h1>
+            <p className="text-xs md:text-sm text-muted-foreground mt-1">
+              Gerencie todos os seus gastos
             </p>
           </div>
         </div>
@@ -238,17 +238,17 @@ export default function Expenses() {
   }
 
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Gastos</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Gastos</h1>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Gerencie todos os seus gastos e parcelas
           </p>
         </div>
-        <Button onClick={handleAddExpense} data-testid="button-add-expense">
+        <Button onClick={handleAddExpense} className="w-full sm:w-auto" data-testid="button-add-expense">
           <Plus className="h-4 w-4 mr-2" />
-          Adicionar Gasto
+          Adicionar
         </Button>
       </div>
 
@@ -259,27 +259,22 @@ export default function Expenses() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base font-medium">
-            Todos os Gastos {filteredExpenses.length !== expenses?.length && `(${filteredExpenses.length} de ${expenses?.length})`}
+          <CardTitle className="text-sm md:text-base font-medium">
+            Gastos {filteredExpenses.length !== expenses?.length && `(${filteredExpenses.length}/${expenses?.length})`}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto -mx-6 px-6">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-[200px]">
-                    <Button variant="ghost" size="sm" className="h-8 px-2">
-                      Nome
-                      <ArrowUpDown className="ml-2 h-3 w-3" />
-                    </Button>
-                  </TableHead>
-                  <TableHead>Categoria</TableHead>
-                  <TableHead className="text-right">Valor</TableHead>
-                  <TableHead>Vencimento</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
+                  <TableHead className="min-w-[120px] text-xs">Nome</TableHead>
+                  <TableHead className="min-w-[80px] text-xs hidden sm:table-cell">Categoria</TableHead>
+                  <TableHead className="text-right text-xs min-w-[70px]">Valor</TableHead>
+                  <TableHead className="min-w-[80px] text-xs hidden md:table-cell">Vencimento</TableHead>
+                  <TableHead className="text-xs hidden sm:table-cell">Tipo</TableHead>
+                  <TableHead className="text-xs hidden sm:table-cell">Status</TableHead>
+                  <TableHead className="text-right text-xs">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -287,15 +282,15 @@ export default function Expenses() {
                   <TableRow>
                     <TableCell colSpan={7} className="h-24 text-center">
                       <div className="flex flex-col items-center justify-center py-8">
-                        <p className="text-sm text-muted-foreground">
-                          {expenses?.length === 0 ? "Nenhum gasto cadastrado" : "Nenhum gasto encontrado com os filtros aplicados"}
+                        <p className="text-xs md:text-sm text-muted-foreground">
+                          {expenses?.length === 0 ? "Nenhum gasto" : "Nenhum encontrado"}
                         </p>
                         <Button
                           variant="link"
                           onClick={handleAddExpense}
-                          className="mt-2"
+                          className="mt-2 text-xs"
                         >
-                          {expenses?.length === 0 ? "Adicionar seu primeiro gasto" : "Ajustar filtros"}
+                          Adicionar
                         </Button>
                       </div>
                     </TableCell>
@@ -304,64 +299,65 @@ export default function Expenses() {
                   filteredExpenses.map((expense) => (
                     <TableRow
                       key={expense.id}
-                      className="hover-elevate"
+                      className="hover-elevate text-xs md:text-sm"
                       data-testid={`row-expense-${expense.id}`}
                     >
-                      <TableCell className="font-medium">
+                      <TableCell className="font-medium max-w-[120px] truncate">
                         {expense.name}
                       </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-muted-foreground">
-                          {expense.category}
-                        </span>
+                      <TableCell className="hidden sm:table-cell text-muted-foreground truncate">
+                        {expense.category}
                       </TableCell>
                       <TableCell className="text-right tabular-nums font-semibold">
                         {formatCurrency(expense.value)}
                       </TableCell>
-                      <TableCell>
-                        <span className="text-sm">
-                          {new Date(expense.dueDate).toLocaleDateString("pt-BR")}
-                        </span>
+                      <TableCell className="hidden md:table-cell text-muted-foreground">
+                        {new Date(expense.dueDate).toLocaleDateString("pt-BR", {
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         {getTypeBadge(
                           expense.type,
                           expense.totalInstallments,
                           expense.paidInstallments || 0
                         )}
                       </TableCell>
-                      <TableCell>{getStatusBadge(expense.status)}</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        {getStatusBadge(expense.status)}
+                      </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1">
                           {expense.status !== "paid" && (
                             <Button
                               variant="ghost"
                               size="icon"
+                              className="h-8 w-8"
                               onClick={() => handleTogglePayment(expense)}
                               title="Marcar como pago"
                               data-testid={`button-toggle-payment-${expense.id}`}
                             >
-                              <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-                              <span className="sr-only">Marcar como pago</span>
+                              <CheckCircle2 className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
                             </Button>
                           )}
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="h-8 w-8"
                             onClick={() => handleEditExpense(expense)}
                             data-testid={`button-edit-${expense.id}`}
                           >
-                            <Pencil className="h-4 w-4" />
-                            <span className="sr-only">Editar</span>
+                            <Pencil className="h-3.5 w-3.5" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="h-8 w-8"
                             onClick={() => handleDeleteExpense(expense.id)}
                             data-testid={`button-delete-${expense.id}`}
                           >
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Excluir</span>
+                            <Trash2 className="h-3.5 w-3.5" />
                           </Button>
                         </div>
                       </TableCell>
@@ -386,7 +382,7 @@ export default function Expenses() {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir este gasto? Esta ação não pode ser desfeita.
+              Tem certeza que deseja excluir?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

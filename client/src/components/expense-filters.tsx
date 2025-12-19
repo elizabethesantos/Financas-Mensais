@@ -51,15 +51,15 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
   const hasActiveFilters = Object.values(filters).some((v) => v !== undefined && v !== "");
 
   return (
-    <div className="space-y-4 p-4 bg-card rounded-lg border">
-      <div className="flex items-center justify-between">
-        <h3 className="font-medium text-sm">Filtros Avançados</h3>
+    <div className="space-y-3 p-3 md:p-4 bg-card rounded-lg border">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h3 className="font-medium text-xs md:text-sm">Filtros</h3>
         {hasActiveFilters && (
           <Button
             variant="ghost"
             size="sm"
             onClick={handleClear}
-            className="h-8"
+            className="h-7 text-xs"
             data-testid="button-clear-filters"
           >
             <X className="h-3 w-3 mr-1" />
@@ -68,7 +68,7 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 md:gap-3">
         <div className="space-y-1">
           <label className="text-xs font-medium text-muted-foreground">
             Categoria
@@ -79,7 +79,7 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
               handleFilterChange({ category: value === "all" ? undefined : value })
             }
           >
-            <SelectTrigger data-testid="filter-category" className="h-8 text-sm">
+            <SelectTrigger data-testid="filter-category" className="h-8 text-xs">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
@@ -103,7 +103,7 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
               handleFilterChange({ status: value === "all" ? undefined : value })
             }
           >
-            <SelectTrigger data-testid="filter-status" className="h-8 text-sm">
+            <SelectTrigger data-testid="filter-status" className="h-8 text-xs">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
@@ -125,7 +125,7 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
               handleFilterChange({ type: value === "all" ? undefined : value })
             }
           >
-            <SelectTrigger data-testid="filter-type" className="h-8 text-sm">
+            <SelectTrigger data-testid="filter-type" className="h-8 text-xs">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
@@ -147,7 +147,7 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
               handleFilterChange({ startDate: e.target.value || undefined })
             }
             data-testid="filter-start-date"
-            className="h-8 text-sm"
+            className="h-8 text-xs"
           />
         </div>
 
@@ -162,7 +162,7 @@ export function ExpenseFilters({ onFilterChange, onClearFilters }: ExpenseFilter
               handleFilterChange({ endDate: e.target.value || undefined })
             }
             data-testid="filter-end-date"
-            className="h-8 text-sm"
+            className="h-8 text-xs"
           />
         </div>
       </div>

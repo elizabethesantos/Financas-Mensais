@@ -113,14 +113,14 @@ export default function Dashboard() {
 
   if (expensesLoading || categoryLoading || monthlyLoading) {
     return (
-      <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Dashboard</h1>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Visão geral dos seus gastos e finanças
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {[1, 2, 3, 4].map((i) => (
             <Card key={i}>
               <CardHeader className="space-y-0 pb-2">
@@ -137,23 +137,23 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
       <div>
-        <h1 className="text-3xl font-semibold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Dashboard</h1>
+        <p className="text-xs md:text-sm text-muted-foreground mt-1">
           Visão geral dos seus gastos e finanças
         </p>
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Card data-testid="card-total">
           <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Mensal</CardTitle>
-            <Wallet className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Total Mensal</CardTitle>
+            <Wallet className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold tabular-nums" data-testid="text-total">
+            <div className="text-lg sm:text-2xl font-semibold tabular-nums break-words" data-testid="text-total">
               {formatCurrency(metrics.totalMonth)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -164,11 +164,11 @@ export default function Dashboard() {
 
         <Card data-testid="card-paid">
           <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pago</CardTitle>
-            <TrendingUp className="h-4 w-4 text-chart-2" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Pago</CardTitle>
+            <TrendingUp className="h-4 w-4 text-chart-2 flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold tabular-nums text-chart-2" data-testid="text-paid">
+            <div className="text-lg sm:text-2xl font-semibold tabular-nums text-chart-2 break-words" data-testid="text-paid">
               {formatCurrency(metrics.paid)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -181,11 +181,11 @@ export default function Dashboard() {
 
         <Card data-testid="card-pending">
           <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pendente</CardTitle>
-            <Clock className="h-4 w-4 text-chart-4" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Pendente</CardTitle>
+            <Clock className="h-4 w-4 text-chart-4 flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold tabular-nums text-chart-4" data-testid="text-pending">
+            <div className="text-lg sm:text-2xl font-semibold tabular-nums text-chart-4 break-words" data-testid="text-pending">
               {formatCurrency(metrics.pending)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -196,11 +196,11 @@ export default function Dashboard() {
 
         <Card data-testid="card-overdue">
           <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Vencidos</CardTitle>
-            <AlertCircle className="h-4 w-4 text-chart-3" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Vencidos</CardTitle>
+            <AlertCircle className="h-4 w-4 text-chart-3 flex-shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold tabular-nums text-chart-3" data-testid="text-overdue">
+            <div className="text-lg sm:text-2xl font-semibold tabular-nums text-chart-3 break-words" data-testid="text-overdue">
               {formatCurrency(metrics.overdue)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -211,22 +211,25 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base font-medium">
+            <CardTitle className="text-sm md:text-base font-medium">
               Gastos por Categoria
             </CardTitle>
           </CardHeader>
           <CardContent>
             {categoryChartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={categoryChartData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                   <XAxis
                     dataKey="name"
                     className="text-xs"
                     tick={{ fill: "hsl(var(--muted-foreground))" }}
+                    angle={-45}
+                    textAnchor="end"
+                    height={80}
                   />
                   <YAxis
                     className="text-xs"
@@ -244,7 +247,7 @@ export default function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">
+              <div className="h-[250px] flex items-center justify-center text-xs sm:text-sm text-muted-foreground">
                 Nenhum dado disponível
               </div>
             )}
@@ -253,88 +256,79 @@ export default function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-medium">
-              Próximos Vencimentos
+            <CardTitle className="text-sm md:text-base font-medium">
+              Últimos 5 Meses
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {upcomingExpenses.length > 0 ? (
-              <div className="space-y-4">
-                {upcomingExpenses.map((item, index) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between pb-4 border-b last:border-0 last:pb-0"
-                    data-testid={`upcoming-${index}`}
-                  >
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium">{item.name}</p>
-                      <p className="text-xs text-muted-foreground">{item.category}</p>
-                    </div>
-                    <div className="text-right space-y-1">
-                      <p className="text-sm font-semibold tabular-nums">
-                        {formatCurrency(parseFloat(item.value))}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(item.dueDate).toLocaleDateString("pt-BR")}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            {monthlyChartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={monthlyChartData}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                  <XAxis
+                    dataKey="month"
+                    className="text-xs"
+                    tick={{ fill: "hsl(var(--muted-foreground))" }}
+                  />
+                  <YAxis
+                    className="text-xs"
+                    tick={{ fill: "hsl(var(--muted-foreground))" }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "0.5rem",
+                    }}
+                    formatter={(value: number) => formatCurrency(value)}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke="hsl(var(--chart-1))"
+                    strokeWidth={2}
+                    dot={{ fill: "hsl(var(--chart-1))", r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             ) : (
-              <div className="py-8 text-center text-sm text-muted-foreground">
-                Nenhum vencimento próximo
+              <div className="h-[250px] flex items-center justify-center text-xs sm:text-sm text-muted-foreground">
+                Nenhum dado disponível
               </div>
             )}
           </CardContent>
         </Card>
       </div>
 
-      {/* Trend Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base font-medium">
-            Evolução Mensal de Gastos
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {monthlyChartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={monthlyChartData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis
-                  dataKey="month"
-                  className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))" }}
-                />
-                <YAxis
-                  className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))" }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "0.5rem",
-                  }}
-                  formatter={(value: number) => formatCurrency(value)}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={2}
-                  dot={{ fill: "hsl(var(--primary))", r: 4 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="h-[300px] flex items-center justify-center text-sm text-muted-foreground">
-              Nenhum dado disponível
+      {/* Upcoming Expenses */}
+      {upcomingExpenses.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm md:text-base font-medium">Próximos Vencimentos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {upcomingExpenses.map((expense) => (
+                <div
+                  key={expense.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-muted/50 gap-2"
+                  data-testid={`upcoming-expense-${expense.id}`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{expense.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(expense.dueDate).toLocaleDateString("pt-BR")}
+                    </p>
+                  </div>
+                  <p className="text-sm font-semibold tabular-nums">
+                    {formatCurrency(expense.value)}
+                  </p>
+                </div>
+              ))}
             </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

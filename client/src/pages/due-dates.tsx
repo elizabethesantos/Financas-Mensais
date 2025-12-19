@@ -66,10 +66,10 @@ export default function DueDates() {
 
   if (isLoading) {
     return (
-      <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Vencimentos</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Vencimentos</h1>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Visualize os vencimentos em calendário
           </p>
         </div>
@@ -83,25 +83,26 @@ export default function DueDates() {
   }
 
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       <div>
-        <h1 className="text-3xl font-semibold text-foreground">Vencimentos</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-2xl md:text-3xl font-semibold text-foreground">Vencimentos</h1>
+        <p className="text-xs md:text-sm text-muted-foreground mt-1">
           Visualize os vencimentos em calendário
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <CardTitle className="text-sm md:text-base font-medium">
                 {format(currentDate, "MMMM 'de' yyyy", { locale: ptBR })}
               </CardTitle>
               <div className="flex gap-2">
                 <Button
                   variant="outline"
                   size="icon"
+                  className="h-8 w-8 md:h-9 md:w-9"
                   onClick={goToPreviousMonth}
                   data-testid="button-prev-month"
                 >
@@ -110,6 +111,7 @@ export default function DueDates() {
                 <Button
                   variant="outline"
                   size="icon"
+                  className="h-8 w-8 md:h-9 md:w-9"
                   onClick={goToNextMonth}
                   data-testid="button-next-month"
                 >
@@ -119,151 +121,113 @@ export default function DueDates() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-7 gap-2">
-              {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day) => (
-                <div
-                  key={day}
-                  className="text-center text-xs font-medium text-muted-foreground p-2"
-                >
-                  {day}
-                </div>
-              ))}
-              
-              {Array.from({ length: monthStart.getDay() }).map((_, index) => (
-                <div key={`empty-${index}`} className="p-2" />
-              ))}
-              
-              {daysInMonth.map((day) => {
-                const hasExpense = hasExpenseOnDate(day);
-                const status = getDateStatus(day);
-                const isSelected = selectedDate && isSameDay(day, selectedDate);
-                const isTodayDate = isToday(day);
-                
-                return (
-                  <button
-                    key={day.toISOString()}
-                    onClick={() => setSelectedDate(day)}
-                    className={`
-                      relative p-2 h-16 rounded-md border transition-colors
-                      ${isSelected ? "bg-primary text-primary-foreground border-primary" : "bg-card border-card-border hover-elevate"}
-                      ${isTodayDate && !isSelected ? "border-primary" : ""}
-                    `}
-                    data-testid={`day-${format(day, "yyyy-MM-dd")}`}
+            <div className="space-y-4">
+              {/* Calendar days header */}
+              <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2">
+                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"].map((day) => (
+                  <div
+                    key={day}
+                    className="text-center text-xs md:text-sm font-semibold text-muted-foreground p-1"
                   >
-                    <div className="text-sm font-medium">
-                      {format(day, "d")}
-                    </div>
-                    {hasExpense && (
-                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
-                        <div
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            status === "overdue"
-                              ? "bg-chart-3"
-                              : status === "pending"
-                              ? "bg-chart-4"
-                              : "bg-chart-2"
-                          }`}
-                        />
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+                    {day}
+                  </div>
+                ))}
+              </div>
 
-            <div className="mt-6 flex flex-wrap gap-4">
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-chart-2" />
-                <span className="text-xs text-muted-foreground">Pago</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-chart-4" />
-                <span className="text-xs text-muted-foreground">Pendente</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-chart-3" />
-                <span className="text-xs text-muted-foreground">Vencido</span>
+              {/* Calendar days */}
+              <div className="grid grid-cols-7 gap-1 md:gap-2">
+                {Array.from({ length: monthStart.getDay() }).map((_, i) => (
+                  <div key={`empty-${i}`} className="aspect-square"></div>
+                ))}
+
+                {daysInMonth.map((date) => {
+                  const status = getDateStatus(date);
+                  const isSelected = selectedDate && isSameDay(date, selectedDate);
+                  const isTodayDate = isToday(date);
+
+                  const statusColors = {
+                    paid: "bg-chart-2/20 border-chart-2",
+                    pending: "bg-chart-4/20 border-chart-4",
+                    overdue: "bg-chart-3/20 border-chart-3",
+                    null: "bg-muted",
+                  };
+
+                  const bgColor = statusColors[status || "null"];
+
+                  return (
+                    <button
+                      key={date.toISOString()}
+                      onClick={() => setSelectedDate(date)}
+                      className={`aspect-square p-1 rounded border text-xs md:text-sm font-medium transition-all ${bgColor} ${
+                        isSelected
+                          ? "ring-2 ring-primary border-primary"
+                          : "border-border hover-elevate"
+                      } ${isTodayDate ? "font-bold text-primary" : ""}`}
+                      data-testid={`calendar-day-${date.getDate()}`}
+                    >
+                      {date.getDate()}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Selected Date Expenses */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-medium">
+            <CardTitle className="text-sm md:text-base font-medium">
               {selectedDate
                 ? format(selectedDate, "d 'de' MMMM", { locale: ptBR })
                 : "Selecione uma data"}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {selectedDate ? (
-              selectedDateExpenses.length > 0 ? (
-                <div className="space-y-4">
-                  {selectedDateExpenses.map((expense) => (
-                    <div
-                      key={expense.id}
-                      className="pb-4 border-b last:border-0 last:pb-0"
-                      data-testid={`expense-detail-${expense.id}`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="space-y-1 flex-1">
-                          <p className="text-sm font-medium">{expense.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {format(new Date(expense.dueDate), "dd/MM/yyyy")}
-                          </p>
-                        </div>
-                        <div className="text-right space-y-1">
-                          <p className="text-sm font-semibold tabular-nums">
-                            {formatCurrency(parseFloat(expense.value))}
-                          </p>
-                          <Badge
-                            variant={
-                              expense.status === "paid"
-                                ? "default"
-                                : expense.status === "overdue"
-                                ? "destructive"
-                                : "secondary"
-                            }
-                            className="text-xs"
-                          >
-                            {expense.status === "paid"
-                              ? "Pago"
-                              : expense.status === "overdue"
-                              ? "Vencido"
-                              : "Pendente"}
-                          </Badge>
-                        </div>
-                      </div>
+            {selectedDateExpenses.length > 0 ? (
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {selectedDateExpenses.map((expense) => (
+                  <div
+                    key={expense.id}
+                    className="p-2 md:p-3 rounded-lg bg-muted/50 space-y-1"
+                    data-testid={`expense-detail-${expense.id}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-xs md:text-sm font-medium break-words flex-1">
+                        {expense.name}
+                      </p>
+                      <Badge
+                        variant={
+                          expense.status === "paid"
+                            ? "default"
+                            : expense.status === "overdue"
+                            ? "destructive"
+                            : "secondary"
+                        }
+                        className="text-xs flex-shrink-0"
+                      >
+                        {expense.status === "paid"
+                          ? "Pago"
+                          : expense.status === "pending"
+                          ? "Pendente"
+                          : "Vencido"}
+                      </Badge>
                     </div>
-                  ))}
-                  <div className="pt-4 border-t">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Total do dia</span>
-                      <span className="text-base font-semibold tabular-nums">
-                        {formatCurrency(
-                          selectedDateExpenses.reduce(
-                            (sum, expense) => sum + parseFloat(expense.value),
-                            0
-                          )
-                        )}
-                      </span>
-                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {expense.category}
+                    </p>
+                    <p className="text-sm font-semibold tabular-nums">
+                      {formatCurrency(parseFloat(expense.value))}
+                    </p>
                   </div>
-                </div>
-              ) : (
-                <div className="py-8 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    Nenhum vencimento nesta data
-                  </p>
-                </div>
-              )
-            ) : (
-              <div className="py-8 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Clique em uma data no calendário para ver os vencimentos
-                </p>
+                ))}
               </div>
+            ) : (
+              <p className="text-xs md:text-sm text-muted-foreground text-center py-8">
+                {selectedDate
+                  ? "Nenhum gasto nesta data"
+                  : "Clique em um dia para ver os gastos"}
+              </p>
             )}
           </CardContent>
         </Card>

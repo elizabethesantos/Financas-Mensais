@@ -80,29 +80,29 @@ export function ExpenseProjection() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base font-medium">
-          Projeção de Gastos (6 Meses)
+        <CardTitle className="text-sm md:text-base font-medium">
+          Projeção 6 Meses
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 bg-muted rounded-lg">
+          <div className="grid grid-cols-2 gap-2 md:gap-4">
+            <div className="p-2 md:p-3 bg-muted rounded-lg">
               <p className="text-xs text-muted-foreground">Total Projetado</p>
-              <p className="text-lg font-semibold tabular-nums">
+              <p className="text-sm md:text-lg font-semibold tabular-nums break-words">
                 {formatCurrency(totalProjected)}
               </p>
             </div>
-            <div className="p-3 bg-muted rounded-lg">
+            <div className="p-2 md:p-3 bg-muted rounded-lg">
               <p className="text-xs text-muted-foreground">Média Mensal</p>
-              <p className="text-lg font-semibold tabular-nums">
+              <p className="text-sm md:text-lg font-semibold tabular-nums break-words">
                 {formatCurrency(averageMonthly)}
               </p>
             </div>
           </div>
 
           {projectionData.length > 0 && (
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={200}>
               <LineChart data={projectionData}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis
@@ -125,17 +125,13 @@ export function ExpenseProjection() {
                 <Line
                   type="monotone"
                   dataKey="value"
-                  stroke="hsl(var(--chart-4))"
+                  stroke="hsl(var(--chart-1))"
                   strokeWidth={2}
-                  dot={{ fill: "hsl(var(--chart-4))", r: 4 }}
+                  dot={{ fill: "hsl(var(--chart-1))", r: 3 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           )}
-
-          <p className="text-xs text-muted-foreground">
-            ℹ️ Projeção baseada em gastos fixos recorrentes e parcelas pendentes
-          </p>
         </div>
       </CardContent>
     </Card>
