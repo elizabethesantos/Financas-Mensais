@@ -40,8 +40,8 @@ export default function App() {
             <div className="flex h-screen w-full">
               <AppSidebar />
               <div className="flex flex-col flex-1 overflow-hidden">
-                <header className="flex items-center justify-between p-4 border-b bg-background gap-2">
-                  <SidebarTrigger data-testid="button-sidebar-toggle" />
+                <header className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-lilac to-gold gap-2 text-white">
+                  <SidebarTrigger data-testid="button-sidebar-toggle" className="text-white" />
                   <div className="flex items-center gap-2">
                     <NotificationsBadge />
                     <ThemeToggle />

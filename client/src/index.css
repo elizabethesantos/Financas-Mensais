@@ -70,11 +70,18 @@
 
   --input: 0 0% 85%;
   --ring: 217 91% 50%;
+  
+  --lilac: 270 81% 56%;
+  --lilac-foreground: 0 0% 98%;
+  
+  --gold: 45 93% 56%;
+  --gold-foreground: 222 15% 15%;
+  
   --chart-1: 217 91% 50%;
   --chart-2: 142 71% 35%;
-  --chart-3: 0 72% 51%;
-  --chart-4: 38 92% 40%;
-  --chart-5: 271 81% 56%;
+  --chart-3: 270 81% 56%;
+  --chart-4: 45 93% 56%;
+  --chart-5: 0 72% 51%;
 
   --font-sans: Inter, system-ui, -apple-system, sans-serif;
   --font-serif: Georgia, serif;
@@ -188,11 +195,18 @@
 
   --input: 222 10% 25%;
   --ring: 217 91% 60%;
+  
+  --lilac: 270 81% 66%;
+  --lilac-foreground: 0 0% 98%;
+  
+  --gold: 45 93% 66%;
+  --gold-foreground: 222 15% 15%;
+  
   --chart-1: 217 91% 60%;
   --chart-2: 142 76% 45%;
-  --chart-3: 0 84% 60%;
-  --chart-4: 38 92% 50%;
-  --chart-5: 271 91% 65%;
+  --chart-3: 270 81% 66%;
+  --chart-4: 45 93% 66%;
+  --chart-5: 0 84% 60%;
 
   --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.20);
   --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.25);

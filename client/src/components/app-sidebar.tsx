@@ -41,7 +41,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-base font-semibold px-4 py-6">
+          <SidebarGroupLabel className="text-base font-semibold px-4 py-6 bg-gradient-to-r from-lilac/10 to-gold/10 rounded-md text-lilac dark:text-lilac">
             Controle Financeiro
           </SidebarGroupLabel>
           <SidebarGroupContent>
